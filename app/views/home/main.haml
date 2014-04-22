@@ -1,0 +1,26 @@
+.container
+  %h2 Import data
+  - if notice
+    %p#notice.alert.alert-success.container= notice
+  = form_tag('/import', method: 'get', class: 'form-inline') do
+    .form-group= text_field_tag 'filepath', nil, placeholder: 'path/to/File.csv', class: 'form-control'
+    = submit_tag 'Import', class: 'btn btn-primary'
+  %p Please input the path of the CSV file you want to import. Relative paths are evaluated from the app's root directory. E.g. if you have a file 'Multivariate.csv' in the 'db' folder of your app, you would use 'db/Multivariate.csv' in the field above.
+
+.container
+  %h2 View a theorem
+  = form_tag('/search', method: 'get', class: 'form-inline') do
+    .form-group= text_field_tag 'name', nil, placeholder: 'THEOREM_NAME', class: 'form-control'
+    = submit_tag 'Search', class: 'btn btn-primary'
+  %p Search for a theorem from the imported data, see what other theorems it uses in its proof (if available).
+
+.container
+  %h2 Get recommendations
+  = form_tag('/recommend', method: 'get') do
+    .form-group= text_field_tag 'tns', nil, placeholder: 'THEOREM_1,THEOREM_2,THEOREM_3', class: 'form-control'
+    = submit_tag 'Recommend', class: 'btn btn-primary'
+  %p You can input the list of theorems you already used in your proof in the field above. Separate them by commas.
+
+.container
+  %h2 Reset the database
+  = link_to 'Clear DB', '/cleardb', class: 'btn btn-danger', confirm: 'Are you sure you want to purge the database?'

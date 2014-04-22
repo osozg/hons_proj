@@ -1,0 +1,27 @@
+.container
+  %h2 Search for
+  %h3 '#{params[:name]}'
+
+.container
+  - if @theorem
+    - if @theorem.is_item
+      %h4= link_to 'Recommend', recommend_path(tns: @theorem.theorems.map(&:name).join(','))
+      %h4 #{@theorem.name} uses the following theorems in its proof:
+      %table.table.table-striped.table-hover.table-condensed
+        %tr
+          %th Name
+          %th Search
+          %th Recommend
+        - @theorem.theorems.each do |theorem|
+          %tr
+            %td= theorem.name
+            %td= link_to 'Link', search_path(name: theorem.name)
+            %td
+              - if theorem.is_item
+                = link_to 'Link', recommend_path(tns: theorem.theorems.map(&:name).join(','))
+              - else
+                N/A
+    - else
+      %h4 #{@theorem.name} does not have a proof, although it is known. It might be a definition.
+  - else
+    %h4 No results were found.

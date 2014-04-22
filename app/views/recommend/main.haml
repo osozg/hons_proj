@@ -1,0 +1,41 @@
+.container
+  %h2 Recommender results for
+  %h3 '#{params['tns']}'
+.container
+  %h4 Theorems you could use to advance the proof
+  %table.table.table-striped.table-hover.table-condensed
+    %tr
+      %th Name
+      %th Estimate
+      %th Search
+      %th Recommend
+    - @estims.each do |theorem_id, estim|
+      - theorem = Theorem.find(theorem_id)
+      %tr{:class => if (estim>=0.5) then 'success' else '' end}
+        %td= theorem.name
+        %td= estim.round(2)
+        %td= link_to 'Link', search_path(name: theorem.name)
+        %td
+          - if theorem.is_item
+            = link_to 'Link', recommend_path(tns: theorem.theorems.map(&:name).join(','))
+          - else
+            N/A
+
+  %h4 Closest neighbours of the input. The recommendations are based on top 3 from below.
+  %table.table
+    %tr
+      %th Name
+      %th Similarity
+      %th Search
+      %th Recommend
+    - @item_sims.each do |item_id, simil|
+      - theorem = Theorem.find(item_id)
+      %tr
+        %td= theorem.name
+        %td= simil
+        %td= link_to 'Link', search_path(name: theorem.name)
+        %td
+          - if theorem.is_item
+            = link_to 'Link', recommend_path(tns: theorem.theorems.map(&:name).join(','))
+          - else
+            N/A
